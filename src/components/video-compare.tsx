@@ -7,6 +7,8 @@ import {
   Save,
   Trash2,
   Clock,
+  ChevronLeft,
+  ChevronRight,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -27,13 +29,17 @@ export default function MultiVideoPlayer() {
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     const config = params.get('id');
-    
+
     if (config) {
       try {
         const decodedConfig = JSON.parse(atob(config));
         if (Array.isArray(decodedConfig)) {
-          setVideos(decodedConfig.map(video => ({ ...video, isValidUrl: false })));
-          setStartTimeInputs(decodedConfig.map(video => video.startTime.toString()));
+          setVideos(
+            decodedConfig.map((video) => ({ ...video, isValidUrl: false }))
+          );
+          setStartTimeInputs(
+            decodedConfig.map((video) => video.startTime.toString())
+          );
         }
       } catch (error) {
         console.error('Error parsing config:', error);
@@ -43,7 +49,11 @@ export default function MultiVideoPlayer() {
         let index = 0;
         while (params.has(`video${index}`)) {
           const [url, startTime] = params.get(`video${index}`)!.split('|');
-          savedVideos.push({ url, startTime: parseFloat(startTime), isValidUrl: false });
+          savedVideos.push({
+            url,
+            startTime: parseFloat(startTime),
+            isValidUrl: false,
+          });
           savedInputs.push(startTime);
           index++;
         }
@@ -202,81 +212,90 @@ export default function MultiVideoPlayer() {
   };
 
   return (
-    <div className="min-h-screen bg-[#0A0A0A] bg-[radial-gradient(circle_at_center,rgba(0,107,255,0.08)_0%,rgba(0,107,255,0)_100%)] p-8">
-      <div className="relative max-w-[90rem] mx-auto">
-        <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-[#0A0A0A] via-[#0A0A0A] to-[#0A0A0A] p-[1px] transition-all duration-300">
-          <div className="absolute inset-[-1px] rounded-2xl bg-gradient-to-r from-[#00D5FF] via-[#0094FF] to-[#0042FF] opacity-20 blur-xl transition-all duration-300" />
-          <div className="absolute inset-[-1px] rounded-2xl bg-gradient-to-r from-[#00D5FF] via-[#0094FF] to-[#0042FF] opacity-20" />
+    <div className='min-h-screen bg-[#0A0A0A] bg-[radial-gradient(circle_at_center,rgba(0,107,255,0.08)_0%,rgba(0,107,255,0)_100%)] p-8'>
+      <div className='relative max-w-[90rem] mx-auto'>
+        <div className='absolute inset-0 rounded-2xl bg-gradient-to-r from-[#0A0A0A] via-[#0A0A0A] to-[#0A0A0A] p-[1px] transition-all duration-300'>
+          <div className='absolute inset-[-1px] rounded-2xl bg-gradient-to-r from-[#00D5FF] via-[#0094FF] to-[#0042FF] opacity-20 blur-xl transition-all duration-300' />
+          <div className='absolute inset-[-1px] rounded-2xl bg-gradient-to-r from-[#00D5FF] via-[#0094FF] to-[#0042FF] opacity-20' />
         </div>
-        <div className="relative rounded-2xl bg-[#0A0A0A]/90 backdrop-blur-xl p-8">
-          <div className="max-w-2xl mx-auto text-center mb-12">
-            <h1 className="text-5xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-[#00D5FF] via-[#0094FF] to-[#0042FF] animate-gradient">
+        <div className='relative rounded-2xl bg-[#0A0A0A]/90 backdrop-blur-xl p-8'>
+          <div className='max-w-2xl mx-auto text-center mb-12'>
+            <h1 className='text-5xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-[#00D5FF] via-[#0094FF] to-[#0042FF] animate-gradient'>
               Multi Video Player
             </h1>
-            <p className="text-[#8F9BB3] text-lg">
+            <p className='text-[#8F9BB3] text-lg'>
               Compare multiple videos with precise timing control
             </p>
           </div>
 
-          <div className="flex flex-col items-center space-y-8 mb-12">
-            <div className="inline-flex rounded-lg shadow-sm">
+          <div className='flex flex-col items-center space-y-8 mb-12'>
+            <div className='inline-flex rounded-lg shadow-sm'>
               <Button
                 onClick={isPlaying ? pauseAll : playAll}
-                variant="default"
-                size="lg"
-                className="rounded-l-lg rounded-r-none text-white min-w-[140px] bg-gradient-to-r from-[#00D5FF] via-[#0094FF] to-[#0042FF] hover:opacity-90 transition-opacity"
+                variant='default'
+                size='lg'
+                className='rounded-l-lg rounded-r-none text-white min-w-[140px] bg-gradient-to-r from-[#00D5FF] via-[#0094FF] to-[#0042FF] hover:opacity-90 transition-opacity'
               >
                 {isPlaying ? (
-                  <Pause className="mr-2" />
+                  <Pause className='mr-2' />
                 ) : (
-                  <Play className="mr-2" />
+                  <Play className='mr-2' />
                 )}
                 {isPlaying ? 'Pause' : 'Play'}
               </Button>
               <Button
                 onClick={resetAll}
-                variant="outline"
-                size="lg"
-                className="rounded-none min-w-[140px] border-x-0 border-[#1E2D3D] text-[#8F9BB3] hover:text-white hover:bg-[#1E2D3D]/50"
+                variant='outline'
+                size='lg'
+                className='rounded-none min-w-[140px] border-x-0 border-[#1E2D3D] text-[#8F9BB3] hover:text-white hover:bg-[#1E2D3D]/50'
               >
-                <RotateCcw className="mr-2" />
+                <RotateCcw className='mr-2' />
                 Reset
               </Button>
               <Button
                 onClick={saveToUrl}
-                variant="outline"
-                size="lg"
-                className="rounded-r-lg rounded-l-none min-w-[140px] border-[#1E2D3D] text-[#8F9BB3] hover:text-white hover:bg-[#1E2D3D]/50"
+                variant='outline'
+                size='lg'
+                className='rounded-r-lg rounded-l-none min-w-[140px] border-[#1E2D3D] text-[#8F9BB3] hover:text-white hover:bg-[#1E2D3D]/50'
               >
-                <Save className="mr-2" />
+                <Save className='mr-2' />
+                Save
+              </Button>
+              <Button
+                onClick={saveToUrl}
+                variant='outline'
+                size='lg'
+                className='rounded-r-lg rounded-l-none min-w-[140px] border-[#1E2D3D] text-[#8F9BB3] hover:text-white hover:bg-[#1E2D3D]/50'
+              >
+                <Save className='mr-2' />
                 Save
               </Button>
             </div>
 
             <Button
               onClick={addVideo}
-              variant="outline"
-              size="lg"
-              className="border-dashed border-2 border-[#1E2D3D] text-[#8F9BB3] hover:text-white hover:border-[#0094FF] hover:bg-[#1E2D3D]/30 transition-all"
+              variant='outline'
+              size='lg'
+              className='border-dashed border-2 border-[#1E2D3D] text-[#8F9BB3] hover:text-white hover:border-[#0094FF] hover:bg-[#1E2D3D]/30 transition-all'
             >
-              <Plus className="mr-2" />
+              <Plus className='mr-2' />
               Add Video
             </Button>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
+          <div className='grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6'>
             {videos.map((video, index) => (
               <div
                 key={index}
-                className="group relative rounded-xl transition-all duration-300"
+                className='group relative rounded-xl transition-all duration-300'
               >
-                <div className="absolute inset-0 rounded-xl bg-gradient-to-r from-[#00D5FF] via-[#0094FF] to-[#0042FF] opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                <div className="relative rounded-xl bg-[#0F1623] border border-[#1E2D3D] overflow-hidden">
-                  <div className="p-6 space-y-4">
-                    <div className="grid grid-cols-[80px_1fr_auto] gap-3 items-center">
+                <div className='absolute inset-0 rounded-xl bg-gradient-to-r from-[#00D5FF] via-[#0094FF] to-[#0042FF] opacity-0 group-hover:opacity-100 transition-opacity duration-300' />
+                <div className='relative rounded-xl bg-[#0F1623] border border-[#1E2D3D] overflow-hidden'>
+                  <div className='p-6 space-y-4'>
+                    <div className='grid grid-cols-[80px_1fr_auto] gap-3 items-center'>
                       <Label
                         htmlFor={`video-url-${index}`}
-                        className="text-[#8F9BB3]"
+                        className='text-[#8F9BB3]'
                       >
                         Video URL:
                       </Label>
@@ -286,46 +305,81 @@ export default function MultiVideoPlayer() {
                         onChange={(e) =>
                           updateVideo(index, 'url', e.target.value)
                         }
-                        className="flex-grow bg-[#0A0A0A] border-[#1E2D3D] text-white focus:border-[#0094FF] focus:ring-[#0094FF]"
-                        placeholder="Enter video URL"
+                        className='flex-grow bg-[#0A0A0A] border-[#1E2D3D] text-white focus:border-[#0094FF] focus:ring-[#0094FF]'
+                        placeholder='Enter video URL'
                       />
                       <Button
                         onClick={() => removeVideo(index)}
-                        variant="ghost"
-                        size="icon"
-                        className="flex-shrink-0 text-[#8F9BB3] hover:text-red-500 hover:bg-red-500/10"
+                        variant='ghost'
+                        size='icon'
+                        className='flex-shrink-0 text-[#8F9BB3] hover:text-red-500 hover:bg-red-500/10'
                       >
-                        <Trash2 className="h-4 w-4" />
+                        <Trash2 className='h-4 w-4' />
                       </Button>
                     </div>
 
                     {video.isValidUrl && (
-                      <div className="grid grid-cols-[80px_1fr] gap-3 items-center">
+                      <div className='grid grid-cols-[80px_1fr] gap-3 items-center'>
                         <Label
                           htmlFor={`start-time-${index}`}
-                          className="text-[#8F9BB3]"
+                          className='text-[#8F9BB3]'
                         >
                           Start Time:
                         </Label>
-                        <div className="flex items-center gap-3">
-                          <Input
-                            id={`start-time-${index}`}
-                            type="text"
-                            inputMode="decimal"
-                            value={startTimeInputs[index]}
-                            onChange={(e) =>
-                              updateVideo(index, 'startTime', e.target.value)
-                            }
-                            className="w-24 bg-[#0A0A0A] border-[#1E2D3D] text-white focus:border-[#0094FF] focus:ring-[#0094FF]"
-                          />
-                          <span className="text-[#8F9BB3]">sec</span>
+                        <div className='flex items-center gap-3'>
+                          <div className='flex items-center gap-0'>
+                            <Button
+                              onClick={() =>
+                                updateVideo(
+                                  index,
+                                  'startTime',
+                                  Math.max(
+                                    0,
+                                    parseFloat(startTimeInputs[index]) - 0.01
+                                  )
+                                )
+                              } // 自定义减按钮
+                              variant='outline'
+                              size='sm'
+                              className='p-0 border-[#1E2D3D] text-[#8F9BB3] hover:text-white hover:bg-[#1E2D3D]/30'
+                            >
+                              <ChevronLeft />
+                            </Button>
+                            <Input
+                              id={`start-time-${index}`}
+                              type='number'
+                              step='0.01'
+                              min='0'
+                              inputMode='decimal'
+                              value={startTimeInputs[index]}
+                              onChange={(e) =>
+                                updateVideo(index, 'startTime', e.target.value)
+                              }
+                              className='w-24 bg-[#0A0A0A] border-[#1E2D3D] text-white focus:border-[#0094FF] focus:ring-[#0094FF] appearance-none'
+                            />
+                            <Button
+                              onClick={() =>
+                                updateVideo(
+                                  index,
+                                  'startTime',
+                                  parseFloat(startTimeInputs[index]) + 0.01
+                                )
+                              } // 自定义加按钮
+                              variant='outline'
+                              size='sm'
+                              className='p-0 border-[#1E2D3D] text-[#8F9BB3] hover:text-white hover:bg-[#1E2D3D]/30'
+                            >
+                              <ChevronRight />
+                            </Button>
+                          </div>
+                          <span className='text-[#8F9BB3]'>sec</span>
                           <Button
                             onClick={() => setCurrentTimeAsStart(index)}
-                            variant="outline"
-                            size="sm"
-                            className="flex-shrink-0 whitespace-nowrap border-[#1E2D3D] text-[#8F9BB3] hover:text-white hover:border-[#0094FF] hover:bg-[#1E2D3D]/30"
+                            variant='outline'
+                            size='sm'
+                            className='flex-shrink-0 whitespace-nowrap border-[#1E2D3D] text-[#8F9BB3] hover:text-white hover:border-[#0094FF] hover:bg-[#1E2D3D]/30'
                           >
-                            <Clock className="mr-2 h-4 w-4" />
+                            <Clock className='mr-2 h-4 w-4' />
                             Set Current
                           </Button>
                         </div>
@@ -333,12 +387,12 @@ export default function MultiVideoPlayer() {
                     )}
                   </div>
 
-                  <div className="relative">
+                  <div className='relative'>
                     <video
                       ref={(el) => (videoRefs.current[index] = el)}
                       src={video.url}
                       controls
-                      className="w-full bg-black"
+                      className='w-full bg-black'
                       onError={() => handleVideoError(index)}
                       onLoadedData={() => handleVideoLoad(index)}
                     />
